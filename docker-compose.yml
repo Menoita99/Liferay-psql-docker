@@ -21,11 +21,11 @@ services:
     env_file:
       - ./env/liferay.env
     volumes:
-#       Can't use this bind mounts in windows cause it changes folder ownership...
       - data:/opt/liferay/data
       - osgi:/opt/liferay/osgi
       - liferay/license
       - liferay/logs
+#       Can't use this bind mounts cause it changes folder ownership to root...
 #      - ./liferay/data:/opt/liferay/data
 #      - ./liferay/osgi:/opt/liferay/osgi
 #      - ./liferay/license:/opt/liferay/license
