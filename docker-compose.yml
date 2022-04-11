@@ -1,0 +1,45 @@
+version: '3'
+services:
+  db:
+    image: 'postgres:14'
+    env_file:
+      - ./env/postgres.env
+    # We use bind mounts so we can backup db data
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
+    # Open this port so it's possibly to remote access through third party software (e.g DBeaver)
+    ports:
+      - '5000:5432'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d lportal -U liferay"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  liferay:
+    image: 'liferay/portal:7.4.3.19-ga19'
+    user: liferay
+    env_file:
+      - ./env/liferay.env
+    volumes:
+#       Can't use this bind mounts in windows cause it changes folder ownership...
+      - data:/opt/liferay/data
+      - osgi:/opt/liferay/osgi
+      - liferay/license
+      - liferay/logs
+#      - ./liferay/data:/opt/liferay/data
+#      - ./liferay/osgi:/opt/liferay/osgi
+#      - ./liferay/license:/opt/liferay/license
+#      - ./liferay/logs:/opt/liferay/logs
+      - ./liferay/mnt:/mnt/liferay
+      - ./liferay/scripts:/usr/local/liferay/scripts/
+    ports:
+     - '80:8080'
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  data:
+  osgi:
+  license:
+  logs:
