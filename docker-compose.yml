@@ -52,22 +52,22 @@ services:
       db:
         condition: service_healthy
 
-#  filesystem_3s_min_io:
-#    image: minio/minio
-#    command: server /data --console-address ":9001"
-#    #Open this port if you want to remote access through third party software
-#    ports:
-#      #- "9000"
-#      - "9001"
-#    env_file:
-#      - env/min_io.env
-#    healthcheck:
-#      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-#      interval: 30s
-#      timeout: 20s
-#      retries: 3
-#    volumes:
-#      - ./filesystem3s/data:/data
+  filesystem_3s_min_io:
+    image: minio/minio
+    command: server /data --console-address ":9001"
+    #Open this port if you want to remote access through third party software
+    ports:
+      - "9000"
+      - "9001"
+    env_file:
+      - env/min_io.env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    volumes:
+      - ./filesystem3s/data:/data
 
 volumes:
   liferay_data:
