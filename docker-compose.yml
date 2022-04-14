@@ -1,4 +1,4 @@
-version: '3'
+version: '2.1'
 services:
   db:
     image: 'postgres:14-alpine'
@@ -18,18 +18,18 @@ services:
 
   elasticsearch:
     #image: 'elasticsearch:7.17.2'
-    build: 
+    build:
       context: .
       dockerfile: ./dockerfiles/elasticsearch.dockerfile
     env_file:
       - ./env/elasticsearch.env
     # Open these ports if you want to remote access through third party software
-    ports:
-      - '9200:9200'
-      - '9300:9300'
-    #volumes:
-    #  - elasticData:/usr/share/elasticsearch/data
-    #  - elasticCerts:/usr/share/elasticsearch/config/certs
+    #ports:
+    #  - '9200:9200'
+    #  - '9300:9300'
+    volumes:
+      - elasticData:/usr/share/elasticsearch/data
+      - elasticCerts:/usr/share/elasticsearch/config/certs
 
   liferay:
     image: 'liferay/portal:7.4.3.19-ga19'
@@ -37,29 +37,42 @@ services:
     env_file:
       - ./env/liferay.env
     volumes:
-      - data:/opt/liferay/data
-      - osgi:/opt/liferay/osgi
-      - license:/opt/liferay/license
-      - logs:/opt/liferay/logs
-#       Can't use this bind mounts cause it changes folder ownership to root...
-#      - ./liferay/data:/opt/liferay/data
-#      - ./liferay/osgi:/opt/liferay/osgi
-#      - ./liferay/license:/opt/liferay/license
-#      - ./liferay/logs:/opt/liferay/logs
-      - ./liferay/mnt:/mnt/liferay
-      - ./liferay/scripts:/usr/local/liferay/scripts/
+      - liferay_data:/opt/liferay/data
+      - liferay_osgi:/opt/liferay/osgi
+      - liferay_license:/opt/liferay/license
+      - liferay_logs:/opt/liferay/logs
+
+      - ./files:/mnt/liferay/files
+      - ./scripts:/mnt/liferay/scripts
+      - ./deploy:/mnt/liferay/deploy
+      - ./patching:/mnt/liferay/patching
     ports:
-     - '80:8080'
-    depends_on:      
+     - '8000:8080'
+    depends_on:
       db:
         condition: service_healthy
 
-
+#  filesystem_3s_min_io:
+#    image: minio/minio
+#    command: server /data --console-address ":9001"
+#    #Open this port if you want to remote access through third party software
+#    ports:
+#      #- "9000"
+#      - "9001"
+#    env_file:
+#      - env/min_io.env
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+#      interval: 30s
+#      timeout: 20s
+#      retries: 3
+#    volumes:
+#      - ./filesystem3s/data:/data
 
 volumes:
-  data:
-  osgi:
-  license:
-  logs:
+  liferay_data:
+  liferay_osgi:
+  liferay_license:
+  liferay_logs:
   elasticData:
   elasticCerts:
