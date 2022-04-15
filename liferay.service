@@ -1,0 +1,17 @@
+#check blog: https://medium.com/@benmorel/creating-a-linux-service-with-systemd-611b5c8b91d6
+
+[Unit]
+Description=Liferay service
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=liferay
+ExecStart=docker-compose -f /app/liferay/docker-compose.yml up
+ExecStop=docker-compose -f /app/liferay/docker-compose.yml down
+
+[Install]
+WantedBy=multi-user.target
