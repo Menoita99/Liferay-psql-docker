@@ -29,8 +29,30 @@ services:
     #  - '9300:9300'
     volumes:
       - elasticData:/usr/share/elasticsearch/data
-      - elasticCerts:/usr/share/elasticsearch/config/certs
+      - elasticConfig:/usr/share/elasticsearch/config
+    healthcheck:
+      test: curl -u elastic:elastic -s -f elasticsearch:9200/_cat/health >/dev/null || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
+  filesystem_3s_min_io:
+    image: minio/minio
+    command: server /data --console-address ":9001"
+    #Open this port if you want to remote access through third party software
+    ports:
+      - "9000"
+      - "9001"
+    env_file:
+      - env/min_io.env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    volumes:
+      - ./filesystem3s/data:/data
+  
   liferay:
     image: 'liferay/portal:7.4.3.19-ga19'
     user: liferay
@@ -51,23 +73,10 @@ services:
     depends_on:
       db:
         condition: service_healthy
-
-  filesystem_3s_min_io:
-    image: minio/minio
-    command: server /data --console-address ":9001"
-    #Open this port if you want to remote access through third party software
-    ports:
-      - "9000"
-      - "9001"
-    env_file:
-      - env/min_io.env
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-      interval: 30s
-      timeout: 20s
-      retries: 3
-    volumes:
-      - ./filesystem3s/data:/data
+      elasticsearch:
+        condition: service_healthy
+      filesystem_3s_min_io:
+        condition: service_healthy
 
 volumes:
   liferay_data:
@@ -75,4 +84,4 @@ volumes:
   liferay_license:
   liferay_logs:
   elasticData:
-  elasticCerts:
+  elasticConfig:
