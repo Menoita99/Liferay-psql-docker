@@ -46,7 +46,7 @@ sysctl -w vm.max_map_count=262144
 
 * If elastic search returns code 137 it may be because it runs out of memory, consider increasing the memory that docker uses and increasing the memory in the docker-compose.yml environment variable of the container.
 
-* Documentation: https://learn.liferay.com/dxp/latest/en/installation-and-upgrades/installing-liferay/using-liferay-docker-images.html
+* Elastic Documentation: https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
 
 
 
