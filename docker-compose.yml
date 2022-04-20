@@ -5,10 +5,10 @@ services:
     env_file:
       - ./env/postgres.env
     volumes:
-      - ./db/data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
     # Open this port if you want to remote access through third party software (e.g DBeaver)
-    #ports:
-    #  - '5432:5432'
+    ports:
+      - '6000:5432'
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d lportal -U liferay"]
       interval: 5s
@@ -36,9 +36,9 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-  
+
   liferay:
-    image: 'liferay/portal:7.4.3.19-ga19'
+    image: 'liferay/portal:7.4.3.20-ga20'
     user: liferay
     env_file:
       - ./env/liferay.env
@@ -58,12 +58,13 @@ services:
       db:
         condition: service_healthy
       elasticsearch:
-        condition: service_healthy
+        condition: service_started
 
 volumes:
+  db_data:
+  elasticData:
+  elasticConfig:
   liferay_data:
   liferay_osgi:
   liferay_license:
   liferay_logs:
-  elasticData:
-  elasticConfig:
