@@ -21,38 +21,21 @@ services:
       dockerfile: ./dockerfiles/elasticsearch.dockerfile
     env_file:
       - ./env/elasticsearch.env
-    #Set's memmory use to 2G
+    #Set's memmory use to 1G
     environment:
-      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
     # Open these ports if you want to remote access through third party software
-    ports:
-      - '9200:9200'
-      - '9300:9300'
+    #ports:
+    #  - '9200:9200'
+    #  - '9300:9300'
     volumes:
       - elasticData:/usr/share/elasticsearch/data
-#      - elasticConfig:/usr/share/elasticsearch/config
-#    healthcheck:
-#      test: curl -s http://elasticsearch01:9200 >/dev/null || exit 1
-#      interval: 30s
-#      timeout: 10s
-#      retries: 5
-
-#  filesystem_3s_min_io:
-#    image: minio/minio
-#    command: server /data --console-address ":9001"
-#    #Open this port if you want to remote access through third party software
-#    ports:
-#      - "9000:9000"
-#      - "9001:9001"
-#    env_file:
-#      - env/min_io.env
-#    healthcheck:
-#      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-#      interval: 30s
-#      timeout: 20s
-#      retries: 3
-#    volumes:
-#      - ./filesystem3s/data:/data
+      - elasticConfig:/usr/share/elasticsearch/config
+    healthcheck:
+      test: curl -s http://elasticsearch01:9200 >/dev/null || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 5
   
   liferay:
     image: 'liferay/portal:7.4.3.19-ga19'
@@ -75,9 +58,7 @@ services:
       db:
         condition: service_healthy
       elasticsearch:
-        condition: service_started
-      #filesystem_3s_min_io:
-      #  condition: service_healthy
+        condition: service_healthy
 
 volumes:
   liferay_data:
@@ -85,4 +66,4 @@ volumes:
   liferay_license:
   liferay_logs:
   elasticData:
-#  elasticConfig:
+  elasticConfig:
