@@ -9,30 +9,30 @@
 Start the compose:
 
 ```
-docker compose up --build -d
+docker-compose up --build -d
 ```
 
 Tail the log:
 
 ```
-docker compose logs -f liferay
+docker-compose logs -f liferay
 ```
 
 Stop the stack
 
 ```
-docker compose stop
+docker-compose stop
 ```
 
 Destroy
 
 ```
-docker compose down
+docker-compose down
 ```
 
-## Upgrading liferay:
+Upgrading liferay: https://learn.liferay.com/dxp/latest/en/installation-and-upgrades/upgrading-liferay/upgrade-basics/upgrading-via-docker.html
 
-https://learn.liferay.com/dxp/latest/en/installation-and-upgrades/upgrading-liferay/upgrade-basics/upgrading-via-docker.html
+# Errors and notes
 
 * If elastic search returns code 78
 verify in the logs if it's cause is the vm.max_map_count error
@@ -44,8 +44,7 @@ echo vm.max_map_count=262144 >> /etc/sysctl.conf
 sysctl -w vm.max_map_count=262144
 ```
 
-* If elastic search returns code 137 it may be because it run out of memmory, consider incresing the memmory that docker uses 
-and increase the memmory in the docker-compose.yml environment variable of the container.
+* If elastic search returns code 137 it may be because it runs out of memory, consider increasing the memory that docker uses and increasing the memory in the docker-compose.yml environment variable of the container.
 
 * Documentation: https://learn.liferay.com/dxp/latest/en/installation-and-upgrades/installing-liferay/using-liferay-docker-images.html
 
@@ -69,7 +68,7 @@ and setenv.sh will be overwritten in /opt/liferay/tomcat/bin/setenv.sh before Li
 
 ##  Scripts           
 
-All scripts in the container directory /mnt/liferay/scripts will be executed before before Liferay Portal starts. 
+All scripts in the container directory /mnt/liferay/scripts will be executed before Liferay Portal starts. 
 Place your scripts in $(pwd)/xyz123/scripts.
 
 
