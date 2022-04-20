@@ -16,12 +16,14 @@ services:
       retries: 5
 
   elasticsearch:
-    #image: 'elasticsearch:7.17.2'
     build:
       context: .
       dockerfile: ./dockerfiles/elasticsearch.dockerfile
     env_file:
       - ./env/elasticsearch.env
+    #Set's memmory use to 2G
+    environment:
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
     # Open these ports if you want to remote access through third party software
     ports:
       - '9200:9200'
