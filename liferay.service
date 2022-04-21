@@ -9,9 +9,9 @@ StartLimitIntervalSec=0
 Type=simple
 Restart=always
 RestartSec=1
-User=liferay
-ExecStart=docker-compose -f /app/liferay/docker-compose.yml up
-ExecStop=docker-compose -f /app/liferay/docker-compose.yml down
+User=portaldmin
+ExecStart=docker-compose -f /opt/Liferay-docker-files/docker-compose.yml up
+ExecStop=docker-compose -f /opt/Liferay-docker-files/docker-compose.yml down
 
 [Install]
 WantedBy=multi-user.target
