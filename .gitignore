@@ -2,3 +2,4 @@ db
 custom
 filesystem3s
 README docs inetum.md
+backup/backup/*

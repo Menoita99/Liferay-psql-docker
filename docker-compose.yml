@@ -37,6 +37,24 @@ services:
       timeout: 10s
       retries: 5
 
+#  filesystem_3s_min_io:
+#    image: minio/minio
+#    command: server /data --console-address ":9001"
+#    #Open this port if you want to remote access through third party software
+#    ports:
+#      - "9000"
+#      - "9001"
+#    env_file:
+#      - env/min_io.env
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+#      interval: 30s
+#      timeout: 20s
+#      retries: 3
+#    volumes:
+#      - ./filesystem3s/data:/data
+
+
   liferay:
     image: 'liferay/portal:7.4.3.20-ga20'
     user: liferay
@@ -59,10 +77,12 @@ services:
         condition: service_healthy
       elasticsearch:
         condition: service_started
+#      filesystem_3s_min_io:
+#        condition: service_healthy
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-     
+
 
 volumes:
   db_data:

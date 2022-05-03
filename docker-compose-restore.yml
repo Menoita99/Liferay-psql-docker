@@ -1,9 +1,9 @@
 version: '2.1'
 services:
-  backup:
+  restore:
     build:
       context: .
-      dockerfile: ./dockerfiles/restore.dockerfile
+      dockerfile: ./dockerfiles/backup.dockerfile
     volumes:
       - db_data:/backup/db/data
 
@@ -15,7 +15,8 @@ services:
       - liferay_license:/backup/liferay/license
       - liferay_logs:/backup/liferay/logs
 
-      - ./backup:/bind/backup
+      - ./backup/backup:/bind
+    command: "cp --verbose -rf /bind /backup"
     #entrypoint: "/bin/sh"
     #stdin_open: true # docker run -i
     #tty: true        # docker run -t
