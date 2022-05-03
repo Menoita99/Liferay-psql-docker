@@ -3,7 +3,7 @@ services:
   backup:
     build:
       context: .
-      dockerfile: ../dockerfiles/backup.dockerfile
+      dockerfile: ./dockerfiles/backup.dockerfile
     volumes:
       - db_data:/backup/db/data
 
@@ -15,9 +15,10 @@ services:
       - liferay_license:/backup/liferay/license
       - liferay_logs:/backup/liferay/logs
 
-      - .:/bind/backup
-#    entrypoint: "/bin/sh"
-
+      - ./backup:/bind/backup
+    #entrypoint: "/bin/sh"
+    #stdin_open: true # docker run -i
+    #tty: true        # docker run -t
 volumes:
   db_data:
   elasticData:

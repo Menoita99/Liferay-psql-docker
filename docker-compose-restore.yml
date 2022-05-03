@@ -1,0 +1,29 @@
+version: '2.1'
+services:
+  backup:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/restore.dockerfile
+    volumes:
+      - db_data:/backup/db/data
+
+      - elasticData:/backup/elastic/data
+      - elasticConfig:/backup/elastic/config
+
+      - liferay_data:/backup/liferay/data
+      - liferay_osgi:/backup/liferay/osgi
+      - liferay_license:/backup/liferay/license
+      - liferay_logs:/backup/liferay/logs
+
+      - ./backup:/bind/backup
+    #entrypoint: "/bin/sh"
+    #stdin_open: true # docker run -i
+    #tty: true        # docker run -t
+volumes:
+  db_data:
+  elasticData:
+  elasticConfig:
+  liferay_data:
+  liferay_osgi:
+  liferay_license:
+  liferay_logs:
