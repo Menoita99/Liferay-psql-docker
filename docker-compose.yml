@@ -36,6 +36,9 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+#    entrypoint: "/bin/sh"
+#    stdin_open: true # docker run -i
+#    tty: true        # docker run -t
 
 #  filesystem_3s_min_io:
 #    image: minio/minio
@@ -57,6 +60,7 @@ services:
 
   liferay:
     image: 'liferay/portal:7.4.3.20-ga20'
+    #user: root
     user: liferay
     env_file:
       - ./env/liferay.env
@@ -81,6 +85,10 @@ services:
 #        condition: service_healthy
     extra_hosts:
       - "host.docker.internal:host-gateway"
+
+    #entrypoint: "/bin/sh"
+    #stdin_open: true # docker run -i
+    #tty: true        # docker run -t
 
 
 
